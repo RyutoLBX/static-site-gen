@@ -1,7 +1,5 @@
-from textnode import TextNode, TextType
-
 class HTMLNode():
-  def __init__(self, tag = None, value = None, children = None, props = None) -> None:
+  def __init__(self, tag: str | None = None, value: str | None = None, children = None, props: dict[str, str] | None = None) -> None:
     self.tag = tag
     self.value = value
     self.children = children
@@ -10,12 +8,15 @@ class HTMLNode():
   def __repr__(self) -> str:
     return f"HTMLNode({self.tag}, {self.value}, {self.children}, {self.props})"
   
-  def __eq__(self, other: object) -> bool:
+  def __eq__(self, other) -> bool:
     if other == None:
       return False
-    return (self.tag == other.tag) and (self.value == other.value) and (self.children == other.children) and (self.props == other.props)
+    if not isinstance(other, HTMLNode):
+      return False
+    is_equal: bool = (self.tag == other.tag) and (self.value == other.value) and (self.children == other.children) and (self.props == other.props)
+    return is_equal
 
-  def to_html(self):
+  def to_html(self) -> str:
     raise NotImplementedError("Method must be implemented")
 
   def props_to_html(self):
@@ -34,17 +35,17 @@ class HTMLNode():
 
 
 class ParentNode(HTMLNode):
-  def __init__(self, tag: str, children: list[HTMLNode], props: str | None = None) -> None:
+  def __init__(self, tag: str, children, props: dict[str, str] | None = None) -> None:
     super().__init__(tag, None, children, props)
   
-  def to_html(self):
+  def to_html(self) -> str:
     if self.tag == None:
       raise ValueError("All parent nodes must have a tag")
     
     if self.children == None:
       raise ValueError("All parent nodes must have children")
     
-    html_text = ""
+    html_text: str = ""
     for child in self.children:
       html_text += child.to_html()
     
@@ -52,7 +53,7 @@ class ParentNode(HTMLNode):
 
 
 class LeafNode(HTMLNode):
-  def __init__(self, tag: str | None, value: str, props: str | None = None) -> None:
+  def __init__(self, tag: str | None, value: str, props: dict[str, str] | None = None) -> None:
     super().__init__(tag, value, None, props)
 
   def to_html(self):
