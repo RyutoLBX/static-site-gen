@@ -1,10 +1,10 @@
 import shutil, os
 
-def copy_recursive(source: str = "static", dest: str = "docs"):
-  if dest == "docs":
-    shutil.rmtree("docs")
-  if not os.path.exists("docs"):
-    os.mkdir("docs")
+def copy_recursive(source: str = "./static", dest: str = "./docs"):
+  if dest == "./docs":
+    shutil.rmtree("./docs")
+  if not os.path.exists("./docs"):
+    os.mkdir("./docs")
   filenames = os.listdir(source)
   
   for item in filenames:
