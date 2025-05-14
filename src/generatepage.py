@@ -26,8 +26,8 @@ def generate_pages_recursive(dir_path_content: str, template_path: str, dest_dir
   for item in filenames:
     current_source = f"{dir_path_content}/{item}"
     if os.path.isfile(current_source): # if it's an md file in ./content
-      generate_page(current_source, template_path, f"{dest_dir_path}/{item[:-2]}html")
+      generate_page(current_source, template_path, f"{dest_dir_path}/{item[:-2]}html", base_path)
     else: # if it's a directory in ./content
       if not os.path.isdir(f"{dest_dir_path}/{item}"):
         os.mkdir(f"{dest_dir_path}/{item}")
-      generate_pages_recursive(current_source, template_path, f"{dest_dir_path}/{item}")
+      generate_pages_recursive(current_source, template_path, f"{dest_dir_path}/{item}", base_path)
