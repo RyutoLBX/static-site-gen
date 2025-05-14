@@ -3,32 +3,10 @@ from splitnodes import text_to_textnodes
 from htmlnode import ParentNode, LeafNode, HTMLNode
 from texttohtmlnode import text_node_to_html_node
 
-# def text_to_children(text: str) -> list[LeafNode]:
-#   # block_type: BlockType = block_to_block_type(text)
-
-#   text_nodes: list[TextNode] = text_to_textnodes(text)
-#   print(f"text nodes: {text_nodes}")
-#   # result_nodes: list[LeafNode] = []
-#   # match block_type:
-#   #   case BlockType.HEADING:
-#   #     pass
-#   #   case BlockType.CODE:
-#   #     for text_node in text_nodes:
-#   #       result_nodes.append(text_node_to_html_node(text_node))
-#   #   case BlockType.QUOTE:
-#   #     pass
-#   #   case BlockType.ULIST:
-#   #     pass
-#   #   case BlockType.OLIST:
-#   #     pass
-#   #   case BlockType.PARAGRAPH:
-#   #     pass
-#   return []
-
 def markdown_to_html_node(markdown: str):
   blocks = markdown_to_blocks(markdown)
 
-  html_nodes = []
+  html_nodes: list[HTMLNode] = []
   node: HTMLNode
   for block in blocks:
     block_type = block_to_block_type(block)
@@ -36,22 +14,27 @@ def markdown_to_html_node(markdown: str):
       # Paragraph block:
       # This is a paragraph with **bold** text and _italic_ text
       case BlockType.PARAGRAPH:
-        paragraph_nodes = []
+        inline_nodes: list[HTMLNode] = []
         lines = block.split("\n")
         for i, line in enumerate(lines):
           if i != len(lines) - 1:
             line += " "
           text_nodes = text_to_textnodes(line)
           for text_node in text_nodes:
-            paragraph_nodes.append(text_node_to_html_node(text_node))
-        node = ParentNode("p", paragraph_nodes)
+            inline_nodes.append(text_node_to_html_node(text_node))
+        node = ParentNode("p", inline_nodes)
 
-      # Heading block:
+      # Heading block (CAN HAVE INLINES):
       # <h1>This is a heading</h1>
       case BlockType.HEADING:
         sections = block.split(" ", 1)
         heading_no = sections[0].count("#")
-        node = LeafNode(f"h{heading_no}", sections[1])
+
+        inline_nodes: list[HTMLNode] = []
+        text_nodes = text_to_textnodes(sections[1])
+        for text_node in text_nodes:
+          inline_nodes.append(text_node_to_html_node(text_node))
+        node = ParentNode(f"h{heading_no}", inline_nodes)
 
       # Code block:
       # ```
@@ -78,34 +61,36 @@ def markdown_to_html_node(markdown: str):
       # - This is an item
       # - This is another item
       case BlockType.ULIST:
-        children = []
+        list_nodes: list[HTMLNode] = []
         lines = block.split("\n")
         for line in lines:
           sections = line.split("- ", 1)
           if len(sections) != 2:
             raise Exception("Malformed list")
           text_nodes = text_to_textnodes(sections[1])
-          leaf_nodes = []
+          inline_nodes: list[HTMLNode] = []
           for text_node in text_nodes:
-            leaf_nodes.append(text_node_to_html_node(text_node))
-          children.append(ParentNode("li", leaf_nodes))
-        node = ParentNode("ul", children)
+            inline_nodes.append(text_node_to_html_node(text_node))
+          list_nodes.append(ParentNode("li", inline_nodes))
+        node = ParentNode("ul", list_nodes)
 
+      # Ordered list block:
+      # 1. This is an item
+      # 2. This is another item
       case BlockType.OLIST:
-        children = []
+        list_nodes: list[HTMLNode] = []
         lines = block.split("\n")
         for line in lines:
           sections = line.split(". ", 1)
           if len(sections) != 2:
             raise Exception("Malformed list")
           text_nodes = text_to_textnodes(sections[1])
-          leaf_nodes = []
+          inline_nodes: list[HTMLNode] = []
           for text_node in text_nodes:
-            leaf_nodes.append(text_node_to_html_node(text_node))
-          children.append(ParentNode("li", leaf_nodes))
-        node = ParentNode("ol", children)
+            inline_nodes.append(text_node_to_html_node(text_node))
+          list_nodes.append(ParentNode("li", inline_nodes))
+        node = ParentNode("ol", list_nodes)
     html_nodes.append(node)
   
   parent_node = ParentNode("div", html_nodes)
-
   return parent_node

@@ -1,13 +1,13 @@
 import re
 
-def extract_markdown_images(text: str):
+def extract_markdown_images(markdown: str):
   match_text = r"!\[(.+?)\]\((.+?)\)"
-  matches = re.findall(match_text, text)
+  matches = re.findall(match_text, markdown)
   return matches
 
-def extract_markdown_links(text: str):
+def extract_markdown_links(markdown: str):
   match_text = r"(?<!\!)\[(.+?)\]\((.+?)\)"
-  matches = re.findall(match_text, text)
+  matches = re.findall(match_text, markdown)
   return matches
 
 def extract_markdown_title(markdown: str):

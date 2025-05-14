@@ -23,13 +23,13 @@ class TestTextNode(unittest.TestCase):
   def test_eq_with_child(self):
     child1 = HTMLNode("h2", "Content Header", None, None)
     child2 = HTMLNode("h2", "Content Header", None, None)
-    node1 = HTMLNode("h1", "Title", child1, None)
-    node2 = HTMLNode("h1", "Title", child2, None)
+    node1 = HTMLNode("h1", "Title", [child1], None)
+    node2 = HTMLNode("h1", "Title", [child2], None)
     self.assertEqual(node1, node2)
 
   def test_not_eq_child(self):
     child1 = HTMLNode("h2", "Content Header", None, None)
-    node1 = HTMLNode("h1", "Title", child1, None)
+    node1 = HTMLNode("h1", "Title", [child1], None)
     node2 = HTMLNode("h1", "Title", None, None)
     self.assertNotEqual(node1, node2)
 

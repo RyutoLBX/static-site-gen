@@ -1,5 +1,5 @@
 class HTMLNode():
-  def __init__(self, tag: str | None = None, value: str | None = None, children = None, props: dict[str, str] | None = None) -> None:
+  def __init__(self, tag: str | None = None, value: str | None = None, children: list["HTMLNode"] | None = None, props: dict[str, str] | None = None) -> None:
     self.tag = tag
     self.value = value
     self.children = children
@@ -8,7 +8,7 @@ class HTMLNode():
   def __repr__(self) -> str:
     return f"HTMLNode({self.tag}, {self.value}, {self.children}, {self.props})"
   
-  def __eq__(self, other) -> bool:
+  def __eq__(self, other: object) -> bool:
     if other == None:
       return False
     if not isinstance(other, HTMLNode):
@@ -19,7 +19,7 @@ class HTMLNode():
   def to_html(self) -> str:
     raise NotImplementedError("Method must be implemented")
 
-  def props_to_html(self):
+  def props_to_html(self) -> str:
     if self.props == None:
       return ""
     
@@ -35,7 +35,7 @@ class HTMLNode():
 
 
 class ParentNode(HTMLNode):
-  def __init__(self, tag: str, children, props: dict[str, str] | None = None) -> None:
+  def __init__(self, tag: str, children: list["HTMLNode"] | None, props: dict[str, str] | None = None) -> None:
     super().__init__(tag, None, children, props)
   
   def to_html(self) -> str:
@@ -56,7 +56,7 @@ class LeafNode(HTMLNode):
   def __init__(self, tag: str | None, value: str, props: dict[str, str] | None = None) -> None:
     super().__init__(tag, value, None, props)
 
-  def to_html(self):
+  def to_html(self) -> str:
     if self.value == None:
       raise ValueError("All leaf nodes must have a value")
 

@@ -107,5 +107,15 @@ code block 2 electric boogaloo
       "<div><p>Ordered lists are actually better!</p><ol><li>ordered item</li><li>ordered item</li><li>ordered item</li></ol></div>",
     )
 
+  def test_inline_markdown_in_headings(self):
+    md = """# This is **Important**, You Know..."""
+
+    node = markdown_to_html_node(md)
+    html = node.to_html()
+    self.assertEqual(
+      html,
+      "<div><h1>This is <b>Important</b>, You Know...</h1></div>",
+    )
+
 if __name__ == "__main__":
     unittest.main()

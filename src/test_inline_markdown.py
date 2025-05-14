@@ -5,28 +5,28 @@ from texttohtmlnode import text_node_to_html_node
 from splitnodes import split_nodes_delimiter, split_nodes_link, split_nodes_image, text_to_textnodes
 
 class TestInlineMarkdown(unittest.TestCase):
-  def test_bold(self):
+  def test_bold_inline(self):
     old_nodes = [TextNode("This is a passage with **bold** text", TextType.TEXT)]
     new_nodes = split_nodes_delimiter(old_nodes, "**", TextType.BOLD)
     self.assertEqual(new_nodes[0], TextNode("This is a passage with ", TextType.TEXT))
     self.assertEqual(new_nodes[1], TextNode("bold", TextType.BOLD))
     self.assertEqual(new_nodes[2], TextNode(" text", TextType.TEXT))
 
-  def test_bold_edge(self):
+  def test_bold_inline_edge(self):
     old_nodes = [TextNode("**Wow!** So many **bold texts!**", TextType.TEXT)]
     new_nodes = split_nodes_delimiter(old_nodes, "**", TextType.BOLD)
     self.assertEqual(new_nodes[0], TextNode("Wow!", TextType.BOLD))
     self.assertEqual(new_nodes[1], TextNode(" So many ", TextType.TEXT))
     self.assertEqual(new_nodes[2], TextNode("bold texts!", TextType.BOLD))
 
-  def test_italic(self):
+  def test_italic_inline(self):
     old_nodes = [TextNode("This is a passage with _italic_ text", TextType.TEXT)]
     new_nodes = split_nodes_delimiter(old_nodes, "_", TextType.ITALIC)
     self.assertEqual(new_nodes[0], TextNode("This is a passage with ", TextType.TEXT))
     self.assertEqual(new_nodes[1], TextNode("italic", TextType.ITALIC))
     self.assertEqual(new_nodes[2], TextNode(" text", TextType.TEXT))
 
-  def test_code(self):
+  def test_code_inline(self):
     old_nodes = [TextNode("This is a passage with `code` text", TextType.TEXT)]
     new_nodes = split_nodes_delimiter(old_nodes, "`", TextType.CODE)
     self.assertEqual(new_nodes[0], TextNode("This is a passage with ", TextType.TEXT))
