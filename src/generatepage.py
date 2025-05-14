@@ -2,7 +2,7 @@ import os
 from markdowntohtml import markdown_to_html_node
 from extractors import extract_markdown_title
 
-def generate_page(from_path: str, template_path: str, dest_path: str, base_path: str = "/"):
+def generate_page(from_path: str, template_path: str, dest_path: str, base_path: str):
   print(f"Generating page from {from_path} to {dest_path} using {template_path}")
   with open(from_path) as source_file:
     source_markdown: str = source_file.read()
@@ -21,7 +21,7 @@ def generate_page(from_path: str, template_path: str, dest_path: str, base_path:
   destination_file.write(full_html)
   return
 
-def generate_pages_recursive(dir_path_content: str, template_path: str, dest_dir_path: str, base_path: str = "/"):
+def generate_pages_recursive(dir_path_content: str, template_path: str, dest_dir_path: str, base_path: str):
   filenames = os.listdir(dir_path_content)
   for item in filenames:
     current_source = f"{dir_path_content}/{item}"
