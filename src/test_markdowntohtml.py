@@ -2,6 +2,7 @@ import unittest
 
 from markdowntohtml import markdown_to_html_node
 
+
 class TestExtractors(unittest.TestCase):
   def test_paragraphs(self):
     md = """
@@ -15,8 +16,8 @@ Second paragraph, _italic_ and `code` here
     node = markdown_to_html_node(md)
     html = node.to_html()
     self.assertEqual(
-        html,
-        "<div><p>Example <b>bolded</b> paragraph text</p><p>Second paragraph, <i>italic</i> and <code>code</code> here</p></div>",
+      html,
+      "<div><p>Example <b>bolded</b> paragraph text</p><p>Second paragraph, <i>italic</i> and <code>code</code> here</p></div>",
     )
 
   def test_codeblock(self):
@@ -66,7 +67,7 @@ code block 2 electric boogaloo
     html = node.to_html()
     self.assertEqual(
       html,
-      "<div><p>Oh no this text has an <img src=\"https://i.imgur.com/fJRm4Vk.jpeg\" alt=\"image\"></img> and a <a href=\"https://example.com\">link</a>!</p></div>",
+      '<div><p>Oh no this text has an <img src="https://i.imgur.com/fJRm4Vk.jpeg" alt="image"></img> and a <a href="https://example.com">link</a>!</p></div>',
     )
 
   def test_all_inline(self):
@@ -76,7 +77,7 @@ code block 2 electric boogaloo
     html = node.to_html()
     self.assertEqual(
       html,
-      "<div><p>Full test of all inline functions: <b>bold</b>, <i>italic</i>, <code>code</code>, and also an image <img src=\"https://i.imgur.com/fJRm4Vk.jpeg\" alt=\"image\"></img> and a <a href=\"https://example.com\">link</a>!</p></div>",
+      '<div><p>Full test of all inline functions: <b>bold</b>, <i>italic</i>, <code>code</code>, and also an image <img src="https://i.imgur.com/fJRm4Vk.jpeg" alt="image"></img> and a <a href="https://example.com">link</a>!</p></div>',
     )
 
   def test_unordered_list(self):
@@ -117,5 +118,6 @@ code block 2 electric boogaloo
       "<div><h1>This is <b>Important</b>, You Know...</h1></div>",
     )
 
+
 if __name__ == "__main__":
-    unittest.main()
+  unittest.main()

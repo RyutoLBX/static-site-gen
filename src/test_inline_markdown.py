@@ -1,8 +1,14 @@
 import unittest
 
+from splitnodes import (
+  split_nodes_delimiter,
+  split_nodes_image,
+  split_nodes_link,
+  text_to_textnodes,
+)
 from textnode import TextNode, TextType
 from texttohtmlnode import text_node_to_html_node
-from splitnodes import split_nodes_delimiter, split_nodes_link, split_nodes_image, text_to_textnodes
+
 
 class TestInlineMarkdown(unittest.TestCase):
   def test_bold_inline(self):
@@ -40,7 +46,9 @@ class TestInlineMarkdown(unittest.TestCase):
 
   def test_none_delimiter(self):
     old_nodes = [TextNode("Test passage with **bold** word", TextType.TEXT)]
-    self.assertRaises(Exception, split_nodes_delimiter, (old_nodes, None, TextType.BOLD))
+    self.assertRaises(
+      Exception, split_nodes_delimiter, (old_nodes, None, TextType.BOLD)
+    )
 
   def test_empty_delimiter(self):
     old_nodes = [TextNode("Test passage with **bold** word", TextType.TEXT)]
@@ -55,17 +63,22 @@ class TestInlineMarkdown(unittest.TestCase):
       TextNode("This is a passage with **bold** text!", TextType.TEXT),
       TextNode("This is a passage with no bold text!", TextType.TEXT),
       TextNode("This is a passage with **bold** text again!", TextType.TEXT),
-      TextNode("This is another passage with zero bold text!", TextType.TEXT)
+      TextNode("This is another passage with zero bold text!", TextType.TEXT),
     ]
     new_nodes = split_nodes_delimiter(old_nodes, "**", TextType.BOLD)
     self.assertEqual(new_nodes[0], TextNode("This is a passage with ", TextType.TEXT))
     self.assertEqual(new_nodes[1], TextNode("bold", TextType.BOLD))
     self.assertEqual(new_nodes[2], TextNode(" text!", TextType.TEXT))
-    self.assertEqual(new_nodes[3], TextNode("This is a passage with no bold text!", TextType.TEXT))
+    self.assertEqual(
+      new_nodes[3], TextNode("This is a passage with no bold text!", TextType.TEXT)
+    )
     self.assertEqual(new_nodes[4], TextNode("This is a passage with ", TextType.TEXT))
     self.assertEqual(new_nodes[5], TextNode("bold", TextType.BOLD))
     self.assertEqual(new_nodes[6], TextNode(" text again!", TextType.TEXT))
-    self.assertEqual(new_nodes[7], TextNode("This is another passage with zero bold text!", TextType.TEXT))
+    self.assertEqual(
+      new_nodes[7],
+      TextNode("This is another passage with zero bold text!", TextType.TEXT),
+    )
 
   # TESTS FOR SPLITTING IMAGES AND LINKS
   def test_split_images(self):
@@ -108,7 +121,10 @@ class TestInlineMarkdown(unittest.TestCase):
     new_nodes = split_nodes_link([node])
     self.assertListEqual(
       [
-        TextNode("This is text with no links but ![two](https://i.imgur.com/zjjcJKZ.png) ![images](https://i.imgur.com/zjjcJKZ.png)", TextType.TEXT),
+        TextNode(
+          "This is text with no links but ![two](https://i.imgur.com/zjjcJKZ.png) ![images](https://i.imgur.com/zjjcJKZ.png)",
+          TextType.TEXT,
+        ),
       ],
       new_nodes,
     )
@@ -121,7 +137,10 @@ class TestInlineMarkdown(unittest.TestCase):
     new_nodes = split_nodes_image([node])
     self.assertListEqual(
       [
-        TextNode("This is text with no images but [two](https://yahoo.com) [links](https://google.com)", TextType.TEXT),
+        TextNode(
+          "This is text with no images but [two](https://yahoo.com) [links](https://google.com)",
+          TextType.TEXT,
+        ),
       ],
       new_nodes,
     )
@@ -136,7 +155,7 @@ class TestInlineMarkdown(unittest.TestCase):
       [
         TextNode("This is text with one ", TextType.TEXT),
         TextNode("image", TextType.IMAGE, "https://i.imgur.com/zjjcJKZ.png"),
-        TextNode(" and one [link](https://google.com)", TextType.TEXT)
+        TextNode(" and one [link](https://google.com)", TextType.TEXT),
       ],
       new_nodes,
     )
@@ -149,14 +168,18 @@ class TestInlineMarkdown(unittest.TestCase):
     new_nodes = split_nodes_link([node])
     self.assertListEqual(
       [
-        TextNode("This is text with one ![image](https://i.imgur.com/zjjcJKZ.png) and one ", TextType.TEXT),
+        TextNode(
+          "This is text with one ![image](https://i.imgur.com/zjjcJKZ.png) and one ",
+          TextType.TEXT,
+        ),
         TextNode("link", TextType.LINK, "https://google.com"),
-        TextNode(" but there's more text after", TextType.TEXT)
+        TextNode(" but there's more text after", TextType.TEXT),
       ],
       new_nodes,
     )
 
     # TESTS FOR ALL NODE SPLITTING
+
   def test_split_all(self):
     text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [boot dev link](https://boot.dev)"
     new_nodes = text_to_textnodes(text)
@@ -171,7 +194,7 @@ class TestInlineMarkdown(unittest.TestCase):
         TextNode(" and an ", TextType.TEXT),
         TextNode("obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"),
         TextNode(" and a ", TextType.TEXT),
-        TextNode("boot dev link", TextType.LINK, "https://boot.dev")
+        TextNode("boot dev link", TextType.LINK, "https://boot.dev"),
       ],
       new_nodes,
     )
@@ -213,7 +236,11 @@ class TestInlineMarkdown(unittest.TestCase):
     html_node = text_node_to_html_node(node)
     self.assertEqual(html_node.tag, "img")
     self.assertEqual(html_node.value, "")
-    self.assertEqual(html_node.props, {"src": "url/to/image", "alt": "This is an alt text for an image"})
+    self.assertEqual(
+      html_node.props,
+      {"src": "url/to/image", "alt": "This is an alt text for an image"},
+    )
+
 
 if __name__ == "__main__":
-    unittest.main()
+  unittest.main()

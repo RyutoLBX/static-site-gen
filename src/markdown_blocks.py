@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class BlockType(Enum):
   PARAGRAPH = "paragraph"
   HEADING = "heading"
@@ -8,10 +9,11 @@ class BlockType(Enum):
   ULIST = "unordered_list"
   OLIST = "ordered_list"
 
+
 def block_to_block_type(block: str) -> BlockType:
   if block.startswith(("# ", "## ", "### ", "#### ", "##### ", "###### ")):
     return BlockType.HEADING
-  
+
   lines = block.split("\n")
   if len(lines) > 1 and lines[0].startswith("```") and lines[-1].endswith("```"):
     return BlockType.CODE
@@ -21,7 +23,7 @@ def block_to_block_type(block: str) -> BlockType:
       if not line.startswith(">"):
         return BlockType.PARAGRAPH
     return BlockType.QUOTE
-  
+
   if block.startswith("- "):
     for line in lines:
       if not line.startswith("- "):
@@ -36,6 +38,7 @@ def block_to_block_type(block: str) -> BlockType:
       i += 1
     return BlockType.OLIST
   return BlockType.PARAGRAPH
+
 
 def markdown_to_blocks(markdown: str) -> list[str]:
   blocks = markdown.split("\n\n")

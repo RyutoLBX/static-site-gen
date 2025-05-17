@@ -2,6 +2,7 @@ import unittest
 
 from markdown_blocks import BlockType, block_to_block_type, markdown_to_blocks
 
+
 class TestBlockType(unittest.TestCase):
   def test_block_to_block_type_heading(self):
     blocks = [
@@ -22,12 +23,12 @@ class TestBlockType(unittest.TestCase):
       BlockType.HEADING,
       BlockType.HEADING,
       BlockType.HEADING,
-      BlockType.PARAGRAPH
+      BlockType.PARAGRAPH,
     ]
     processed: list[BlockType] = []
     for block in blocks:
       processed.append(block_to_block_type(block))
-    
+
     self.assertListEqual(processed, expected_result)
 
   def test_block_to_block_type_code(self):
@@ -43,12 +44,12 @@ class TestBlockType(unittest.TestCase):
       BlockType.PARAGRAPH,
       BlockType.CODE,
       BlockType.PARAGRAPH,
-      BlockType.CODE
+      BlockType.CODE,
     ]
     processed: list[BlockType] = []
     for block in blocks:
       processed.append(block_to_block_type(block))
-    
+
     self.assertListEqual(processed, expected_result)
 
   def test_block_to_block_type_quote(self):
@@ -56,7 +57,7 @@ class TestBlockType(unittest.TestCase):
       "No quote",
       "> Single line quote",
       "> Multi\n> Line\n> Quote",
-      "> Oh I forgot\nTo put a quote marker here"
+      "> Oh I forgot\nTo put a quote marker here",
     ]
     expected_result = [
       BlockType.PARAGRAPH,
@@ -67,7 +68,7 @@ class TestBlockType(unittest.TestCase):
     processed: list[BlockType] = []
     for block in blocks:
       processed.append(block_to_block_type(block))
-    
+
     self.assertListEqual(processed, expected_result)
 
   def test_block_to_block_type_ulist(self):
@@ -75,20 +76,19 @@ class TestBlockType(unittest.TestCase):
       "- This is an unordered list item entry",
       "No list",
       "- \n- ",
-      "- This is a list\nThis is the second item"
+      "- This is a list\nThis is the second item",
     ]
     expected_result = [
       BlockType.ULIST,
       BlockType.PARAGRAPH,
       BlockType.ULIST,
-      BlockType.PARAGRAPH
+      BlockType.PARAGRAPH,
     ]
     processed: list[BlockType] = []
     for block in blocks:
       processed.append(block_to_block_type(block))
-    
-    self.assertListEqual(processed, expected_result)
 
+    self.assertListEqual(processed, expected_result)
 
   def test_block_to_block_type_olist(self):
     blocks = [
@@ -96,14 +96,14 @@ class TestBlockType(unittest.TestCase):
       "1. This is a list\n2. This is the second item",
       "1. This is a list\n2. This is the second item\n3. This is the third item\n4. This is the fourth item\n5. This is the fifth item",
       "1. This is a list\n1. This is the second item",
-      "1. This is a list\n999. This is the second item"
+      "1. This is a list\n999. This is the second item",
     ]
     expected_result = [
       BlockType.PARAGRAPH,
       BlockType.OLIST,
       BlockType.OLIST,
       BlockType.PARAGRAPH,
-      BlockType.PARAGRAPH
+      BlockType.PARAGRAPH,
     ]
     processed: list[BlockType] = []
     for block in blocks:
@@ -192,7 +192,7 @@ This is a different block! It even has some code in it: `print("hello world")`
         "# Heading Text",
         "This is a **bolded** paragraph",
         "This is a paragraph of text. It has some **bold** and _italic_ words inside of it.\nThis is still within the same block.",
-        "This is a different block! It even has some code in it: `print(\"hello world\")`",
+        'This is a different block! It even has some code in it: `print("hello world")`',
         "- This is the first list item in a list block\n- This is a list item\n- This is another list item",
       ],
     )

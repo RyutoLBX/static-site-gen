@@ -1,13 +1,18 @@
 from extractors import extract_markdown_images, extract_markdown_links
 from textnode import TextNode, TextType
 
-def split_nodes_delimiter(old_nodes: list[TextNode], delimiter: str | None, text_type: TextType):
-  if delimiter == None or delimiter == "":
-    raise Exception("Function split_nodes_delimiter must have a defined, non-empty delimiter")
+
+def split_nodes_delimiter(
+  old_nodes: list[TextNode], delimiter: str | None, text_type: TextType
+):
+  if delimiter is None or delimiter == "":
+    raise Exception(
+      "Function split_nodes_delimiter must have a defined, non-empty delimiter"
+    )
 
   if text_type not in TextType:
     raise Exception("Not a valid TextType")
-  
+
   new_nodes: list[TextNode] = []
 
   for node in old_nodes:
@@ -45,7 +50,7 @@ def split_nodes_link(old_nodes: list[TextNode]) -> list[TextNode]:
       result_nodes.append(node)
       continue
     for link in links:
-      sections =  current_text.split(f"[{link[0]}]({link[1]})", 1)
+      sections = current_text.split(f"[{link[0]}]({link[1]})", 1)
       if len(sections) != 2:
         raise Exception("Invalid Markdown link: link not enclosed")
       if sections[0] != "":
@@ -55,6 +60,7 @@ def split_nodes_link(old_nodes: list[TextNode]) -> list[TextNode]:
     if current_text != "":
       result_nodes.append(TextNode(current_text, TextType.TEXT))
   return result_nodes
+
 
 def split_nodes_image(old_nodes: list[TextNode]) -> list[TextNode]:
   result_nodes: list[TextNode] = []
@@ -68,7 +74,7 @@ def split_nodes_image(old_nodes: list[TextNode]) -> list[TextNode]:
       result_nodes.append(node)
       continue
     for image in images:
-      sections =  current_text.split(f"![{image[0]}]({image[1]})", 1)
+      sections = current_text.split(f"![{image[0]}]({image[1]})", 1)
       if len(sections) != 2:
         raise Exception("Invalid Markdown image: image not enclosed")
       if sections[0] != "":
@@ -79,13 +85,14 @@ def split_nodes_image(old_nodes: list[TextNode]) -> list[TextNode]:
       result_nodes.append(TextNode(current_text, TextType.TEXT))
   return result_nodes
 
+
 def text_to_textnodes(text: str | None):
-  if text == "" or text == None:
+  if text == "" or text is None:
     raise Exception("Text cannot be empty or None")
   start_textnode = [TextNode(text, TextType.TEXT)]
-  new_nodes = split_nodes_delimiter(start_textnode, '**', TextType.BOLD)
-  new_nodes = split_nodes_delimiter(new_nodes, '_', TextType.ITALIC)
-  new_nodes = split_nodes_delimiter(new_nodes, '`', TextType.CODE)
+  new_nodes = split_nodes_delimiter(start_textnode, "**", TextType.BOLD)
+  new_nodes = split_nodes_delimiter(new_nodes, "_", TextType.ITALIC)
+  new_nodes = split_nodes_delimiter(new_nodes, "`", TextType.CODE)
   new_nodes = split_nodes_image(new_nodes)
   new_nodes = split_nodes_link(new_nodes)
   return new_nodes

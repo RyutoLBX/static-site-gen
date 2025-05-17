@@ -3,6 +3,7 @@ from splitnodes import text_to_textnodes
 from htmlnode import ParentNode, LeafNode, HTMLNode
 from texttohtmlnode import text_node_to_html_node
 
+
 def markdown_to_html_node(markdown: str):
   blocks = markdown_to_blocks(markdown)
 
@@ -91,6 +92,6 @@ def markdown_to_html_node(markdown: str):
           list_nodes.append(ParentNode("li", inline_nodes))
         node = ParentNode("ol", list_nodes)
     html_nodes.append(node)
-  
+
   parent_node = ParentNode("div", html_nodes)
   return parent_node

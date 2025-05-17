@@ -1,8 +1,9 @@
-from textnode import TextType, TextNode
 from htmlnode import LeafNode
+from textnode import TextNode, TextType
+
 
 def text_node_to_html_node(text_node: TextNode):
-  if not text_node.text_type in TextType:
+  if text_node.text_type not in TextType:
     raise Exception("Unexpected text type")
   match text_node.text_type:
     case TextType.TEXT:
@@ -16,4 +17,6 @@ def text_node_to_html_node(text_node: TextNode):
     case TextType.LINK:
       return LeafNode("a", text_node.text, {"href": f"{text_node.url}"})
     case TextType.IMAGE:
-      return LeafNode("img", "", {"src": f"{text_node.url}", "alt": f"{text_node.text}"})
+      return LeafNode(
+        "img", "", {"src": f"{text_node.url}", "alt": f"{text_node.text}"}
+      )

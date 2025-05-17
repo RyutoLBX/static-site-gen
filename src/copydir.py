@@ -1,4 +1,6 @@
-import shutil, os
+import os
+import shutil
+
 
 def copy_recursive(source: str, dest: str):
   if dest == "./docs":
